@@ -20,11 +20,11 @@ jobs:
         uses: helm/kind-action@v1.8.0
 
       - name: Test cluster
-        uses: rethab/bash-action@v1
-        with:
-          args: |
-            kubectl cluster-info
-            kubectl get nodes
+        run: |
+          kubectl cluster-info
+          kubectl get nodes
+          kubectl get pods --all-namespaces
+        shell: bash
 
       - name: Set up Helm
         run: |
