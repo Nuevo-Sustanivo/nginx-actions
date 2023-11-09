@@ -26,7 +26,7 @@ jobs:
       - name: Create a KinD cluster
         run: |
           kind create cluster --config ingress-config-127.yaml
-        # working-directory: ingress-config-127.yaml
+        working-directory: /home/runner/work/nginx-actions/nginx-actions/
         # Replace kind-config.yaml with the actual path to your KinD cluster configuration
 
       - name: Set up Helm
