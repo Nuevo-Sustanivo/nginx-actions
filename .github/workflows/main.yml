@@ -40,6 +40,6 @@ jobs:
 
       - name: Wait for NGINX deployment to be ready
         run: |
-          kubectl wait --for=condition=Available deployment/nginx-test-release-nginx -n action-space
+          kubectl wait --for=condition=Available deployment/nginx-test-release -n action-space
         # Replace my-nginx-release and my-namespace with the values you used in the Helm install step
 
