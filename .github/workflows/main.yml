@@ -25,8 +25,8 @@ jobs:
 
       - name: Create a KinD cluster
         run: |
-          kind create cluster --config kind-config.yaml
-        working-directory: ./path/to/your/kind-config
+          kind create cluster --config ingress-config-127.yaml
+        working-directory: ingress-config-127.yaml
         # Replace kind-config.yaml with the actual path to your KinD cluster configuration
 
       - name: Set up Helm
@@ -37,11 +37,11 @@ jobs:
       - name: Install NGINX Helm chart
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
-          helm install my-nginx-release bitnami/nginx -n my-namespace
+          helm install nginx-test-release bitnami/nginx -n action-space --create-namespace
         # Replace my-nginx-release and my-namespace with your desired values
 
       - name: Wait for NGINX deployment to be ready
         run: |
-          kubectl wait --for=condition=Available deployment/my-nginx-release-nginx -n my-namespace
+          kubectl wait --for=condition=Available deployment/nginx-test-release-nginx -n action-space
         # Replace my-nginx-release and my-namespace with the values you used in the Helm install step
 
