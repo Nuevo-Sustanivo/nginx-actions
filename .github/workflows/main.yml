@@ -21,11 +21,10 @@ jobs:
 
       - name: Test cluster
         uses: rethab/bash-action@v1
-        with: 
-          script: |
+        with:
+          args: |
             kubectl cluster-info
             kubectl get nodes
-            kubectl get pods --all-namespaces
 
       - name: Set up Helm
         run: |
