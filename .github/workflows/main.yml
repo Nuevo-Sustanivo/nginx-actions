@@ -1,0 +1,47 @@
+name: Deploy NGINX Helm Chart with Quarkus Build
+
+on:
+  push:
+    branches:
+      - main  # Adjust the branch name as needed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        uses: actions/setup-docker@v2
+
+      - name: Install KinD
+        run: |
+          curl -Lo kind https://kind.sigs.k8s.io/dl/v0.11.1/kind-linux-amd64
+          chmod +x kind
+          sudo mv kind /usr/local/bin/
+        shell: bash
+
+      - name: Create a KinD cluster
+        run: |
+          kind create cluster --config kind-config.yaml
+        working-directory: ./path/to/your/kind-config
+        # Replace kind-config.yaml with the actual path to your KinD cluster configuration
+
+      - name: Set up Helm
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+        shell: bash
+
+      - name: Install NGINX Helm chart
+        run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm install my-nginx-release bitnami/nginx -n my-namespace
+        # Replace my-nginx-release and my-namespace with your desired values
+
+      - name: Wait for NGINX deployment to be ready
+        run: |
+          kubectl wait --for=condition=Available deployment/my-nginx-release-nginx -n my-namespace
+        # Replace my-nginx-release and my-namespace with the values you used in the Helm install step
+
