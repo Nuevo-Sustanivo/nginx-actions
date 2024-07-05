@@ -1,0 +1,53 @@
+on:
+    workflow_call:
+      inputs:
+        gh_runner:
+          description: The label of the gh runner to use for the workflow
+          type: string
+          default: "ubuntu-latest"
+        detect-changes-common:
+          description: The path of the deployment
+          type: string
+        detect-changes-dev:
+          description: The path of the deployment
+          type: string
+      outputs:
+        common:
+            description: "Result of detect changes for common"
+            value: ${{ jobs.changes-common.outputs.common }}
+        dev:
+            description: "Result of detect changes for dev"
+            value: ${{ jobs.changes-dev.outputs.dev }}
+
+jobs:
+  changes-common:
+    name: "Detect changes to common folder"
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.event.pull_request.merged == true
+    outputs:
+        common: ${{ steps.changes.outputs.common }}
+    steps:
+      - name: Detect Changes for common
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            ${{ inputs.detect-changes-common }}
+                
+      - name: common folder changes
+        if: steps.changes.outputs.common == 'true'
+        run: echo "Changes to common folder detected!"
+
+  changes-dev:
+    name: "Detect changes to dev folder"
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged == false
+    outputs:
+        dev: ${{ steps.changes.outputs.dev }}
+    steps:
+      - name: Detect Changes for dev
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            ${{ inputs.detect-changes-dev }}
