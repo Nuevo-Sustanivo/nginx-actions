@@ -11,9 +11,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          path: action-space
 
       - name: Set up Helm
         uses: azure/setup-helm@v4.2.0
@@ -23,6 +24,21 @@ jobs:
       - name: Create KinD cluster
         uses: helm/kind-action@v1.10.0
 
+      - name: Check for changed files
+        uses: buffdeveloper/pr-changed-files-action@v1.0.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMON_PATH: 'common'
+          ENV_PATH: 'env'
+          REPO_PATH: 'action-space'
+
+      - name: List files with changes
+        run: |
+          ls -l action-space/files_with_changes
+          FILE_LIST=$(ls -1 mda-domain/files_with_changes)
+          echo "file_list=$FILE_LIST" >> $GITHUB_OUTPUT
+        shell: bash
+      
       - name: Test cluster
         run: |
           kubectl cluster-info
