@@ -11,7 +11,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
   call-reusable-workflow:
-    uses: ./.github/actions/detect-changes/action.yml@b6c7839e38d1e7617c1233985cebe1e4ee18caf8
+    uses: buffdeveloper/nginx-actions/.github/actions/detect-changes/action.yml@main
+    # uses: ./.github/actions/detect-changes/action.yml@feat/upgrade
     with:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       COMMON_PATH: 'common'
