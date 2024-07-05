@@ -4,11 +4,8 @@ on:
   pull_request:
     branches:
     - main
-    types:
-    - opened
-    - reopened
-    - synchronize
-    - closed
+    types: [opened, synchronize, reopened, closed]
+
 
 jobs:
   deploy:
@@ -26,9 +23,6 @@ jobs:
         with:
           version: v3.14.4
 
-      - name: Create KinD cluster
-        uses: helm/kind-action@v1.10.0
-
       - name: Check for changed files
         uses: buffdeveloper/nginx-actions/.github/workflows/actions/detect-changes.yml@main
         with:
@@ -43,6 +37,9 @@ jobs:
           FILE_LIST=$(ls -1 mda-domain/files_with_changes)
           echo "file_list=$FILE_LIST" >> $GITHUB_OUTPUT
         shell: bash
+      
+      - name: Create KinD cluster
+        uses: helm/kind-action@v1.10.0
       
       - name: Test cluster
         run: |
