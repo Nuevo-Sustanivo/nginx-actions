@@ -1,0 +1,69 @@
+name: 'Changed files of a PR'
+description: 'List all files with a change from a PR'
+inputs:
+  GITHUB_TOKEN:
+    description: 'To fetch PR info'
+    required: true
+  ENV_PATH:
+    description: 'Path where changes you care about for env'
+  COMMON_PATH:
+    description: 'Path where changes you care about for common'
+  REPO_PATH:
+    description: 'If more than one repo are cloned in the workflow, pass the path to Check'
+runs:
+  using: 'composite'
+  steps:
+  - name: Fetch PR changed files
+    env:
+      GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+    run: |
+      REPO_PATH=${{ inputs.REPO_PATH }}
+      if [ -n "$REPO_PATH" ]; then
+        cd $REPO_PATH
+      fi
+      PR_NUMBER=${{ github.event.pull_request.number }}
+      gh pr diff $PR_NUMBER --name-only > changed_files.txt
+    shell: bash
+  - name: List the only files to deploy
+    run: |
+      REPO_PATH=${{ inputs.REPO_PATH }}
+      if [ -n "$REPO_PATH" ]; then
+        cd $REPO_PATH
+      fi
+
+
+      mkdir files_with_changes
+      # fetch all files from common directory
+      common=${{ inputs.COMMON_PATH }}
+      if grep -q "$common" changed_files.txt && [ -n "$common" ]; then
+        echo "list all files with a change under the path: $common"
+        grep "$common" changed_files.txt > common.txt
+        cat common.txt
+
+        while IFS= read -r line; do
+          cp $line files_with_changes
+        done < common.txt
+      fi
+
+      # fetch all files from env directory
+      env=${{ inputs.ENV_PATH }}
+      if grep -q "$env" changed_files.txt && [ -n "$env" ]; then
+        echo "list all files with a change under the path: $env"
+        grep "$env" changed_files.txt > env.txt
+        cat env.txt
+
+        while IFS= read -r line; do
+          cp $line files_with_changes
+        done < env.txt
+      fi
+
+      # if no specific target passed and all files with changes need
+      if [ ! -n "$common" ] && [ ! -n "$env" ]; then
+        while IFS= read -r line; do
+          cp $line files_with_changes
+        done < changed_files.txt
+
+        echo "all files with chnages"
+        ls -lrt changed_files.txt
+      fi
+    shell: bash
