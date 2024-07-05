@@ -1,9 +1,9 @@
 name: Deploy NGINX Helm Chart with Quarkus Build
 
 on:
-  push:
+  pull_request:
     branches:
-      - main  # Adjust the branch name as needed
+    - main
 
 jobs:
   deploy:
