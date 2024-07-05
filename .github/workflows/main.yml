@@ -30,7 +30,7 @@ jobs:
         uses: helm/kind-action@v1.10.0
 
       - name: Check for changed files
-        uses: buffdeveloper/nginx-actions@v1.0.0
+        uses: buffdeveloper/nginx-actions/.github/workflows/actions/detect-changes.yml@main
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMON_PATH: 'common'
