@@ -24,8 +24,8 @@ jobs:
           version: v3.14.4
 
       - name: Check for changed files
-        uses: ./action-space/./github/workflows/actions/detect-changes.yml
-        # uses: buffdeveloper/nginx-actions/.github/workflows/actions/detect-changes.yml@main
+        # uses: ./action-space/./github/workflows/actions/detect-changes.yml
+        uses: buffdeveloper/nginx-actions/.github/workflows/actions/detect-changes.yml@main
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMON_PATH: 'common'
