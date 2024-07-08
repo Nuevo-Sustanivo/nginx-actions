@@ -41,7 +41,7 @@ jobs:
           ls -l nginx-action/files_with_changes
           FILE_LIST=$(ls -l nginx-action/files_with_changes)
           echo "Deleted files"
-          echo ls -l nginx-action/files_with_changes | grep -q *.disabled
+          ls -l nginx-action/files_with_changes | grep -q *.disabled
         shell: bash
       
       - name: Create KinD cluster
