@@ -52,10 +52,6 @@ jobs:
           kubectl get pods --all-namespaces
         shell: bash
 
-      # - name: Set up Helm
-      #   run: |
-      #     curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-      #   shell: bash
 
       - name: Install NGINX Helm chart
         run: |
