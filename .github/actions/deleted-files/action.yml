@@ -32,7 +32,14 @@ runs:
       fi
 
 
-      mkdir files_removed
+      mkdir -p files_removed
+      # Safety check to ensure the 'files_removed' directory was created successfully
+      if [ -d "files_removed" ]; then
+        echo "Directory 'files_removed' created successfully"
+      else
+        echo "Failed to create directory 'files_removed'"
+        exit 1
+      fi
       # fetch all files from common directory
       common=${{ inputs.COMMON_PATH }}
       if grep -q "$common" deleted_files.txt && [ -n "$common" ]; then
