@@ -38,12 +38,18 @@ jobs:
 
       - name: List files with changes
         run: |
-          ls -l nginx-action/files_with_changes | grep "\.disabled$"
+          ls -l nginx-action/files_with_changes
+        shell: bash
+
+      - name: List deleted files
+        run: |
+          ls -l nginx-action/files_removed
+          # ls -l nginx-action/files_with_changes | grep "\.disabled$"
           # FILE_LIST=$(ls -l nginx-action/files_with_changes | grep "\.disabled$")
           # echo "Deleted files"
           # echo "$FILE_LIST"
-        shell: bash
-      
+        shell: bash        
+
       - name: Create KinD cluster
         uses: helm/kind-action@v1.10.0
       
