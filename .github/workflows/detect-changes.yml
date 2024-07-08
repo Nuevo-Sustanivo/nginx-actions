@@ -25,8 +25,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' || github.event.pull_request.merged == true
     outputs:
-        changes-common: ${{ needs.changes-common.outputs.changes-common }}
+      changes-common: ${{ steps.changes.outputs.changes-common }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Detect Changes for common
         uses: dorny/paths-filter@v2
         id: changes
@@ -35,7 +37,7 @@ jobs:
             ${{ inputs.detect-changes-common }}
                 
       - name: common folder changes
-        if: needs.changes-common.outputs.changes-common == 'true'
+        if: steps.changes.outputs.changes-common == 'true'
         run: echo "Changes to common folder detected!"
 
   changes-dev:
@@ -45,9 +47,14 @@ jobs:
     outputs:
         dev: ${{ needs.changes-dev.outputs.dev }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Detect Changes for dev
         uses: dorny/paths-filter@v2
         id: changes
         with:
           filters: |
             ${{ inputs.detect-changes-dev }}
+      - name: dev folder changes
+        if: steps.changes.outputs.changes-dev == 'true'
+        run: echo "Changes to dev folder detected!"
