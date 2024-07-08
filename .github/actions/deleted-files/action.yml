@@ -21,7 +21,7 @@ runs:
       if [ -n "$REPO_PATH" ]; then
         cd $REPO_PATH
       fi
-      git log --diff-filter=D --name-only -p -- $REPO_PATH > deleted_files.txt
+      git log --diff-filter=D --name-only -p -- . > deleted_files.txt
     shell: bash
 
   - name: List the only files to delete
@@ -63,7 +63,7 @@ runs:
           cp $line files_removed
         done < deleted_files.txt
 
-        echo "all files with chnages"
+        echo "all deleted files"
         ls -lrt deleted_files.txt
       fi
     shell: bash
