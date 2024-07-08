@@ -1,4 +1,4 @@
-name: 'Changed files of a PR'
+name: 'Deleted files of a PR'
 description: 'List all files deleted from a PR'
 inputs:
   GITHUB_TOKEN:
@@ -13,7 +13,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-  - name: Fetch PR changed files
+  - name: Fetch deleted files from a PR
     env:
       GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
     run: |
@@ -24,7 +24,7 @@ runs:
       git log --diff-filter=D --name-only -- . > deleted_files.txt
     shell: bash
 
-  - name: List the only files to delete
+  - name: List only files to delete
     run: |
       REPO_PATH=${{ inputs.REPO_PATH }}
       if [ -n "$REPO_PATH" ]; then
@@ -43,7 +43,7 @@ runs:
       # fetch all files from common directory
       common=${{ inputs.COMMON_PATH }}
       if grep -q "$common" deleted_files.txt && [ -n "$common" ]; then
-        echo "list all files with a change under the path: $common"
+        echo "list all deleted files under the path: $common"
         grep "$common" deleted_files.txt > common.txt
         cat common.txt
 
@@ -55,7 +55,7 @@ runs:
       # fetch all files from env directory
       env=${{ inputs.ENV_PATH }}
       if grep -q "$env" deleted_files.txt && [ -n "$env" ]; then
-        echo "list all files with a change under the path: $env"
+        echo "list all deleted files under the path: $env"
         grep "$env" deleted_files.txt > env.txt
         cat env.txt
 
