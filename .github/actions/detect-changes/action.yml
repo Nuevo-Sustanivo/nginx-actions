@@ -23,7 +23,7 @@ runs:
       fi
       PR_NUMBER=${{ github.event.pull_request.number }}
       gh pr diff $PR_NUMBER --name-only > changed_files.txt
-      git log --diff-filter=D > deleted_files.txt
+      git log --diff-filter=D -p $REPO_PATH > deleted_files.txt
     shell: bash
   - name: List the only files to deploy
     run: |
