@@ -13,14 +13,6 @@ jobs:
   deploy:
     name: Deploy NGINX Helm Chart
     runs-on: ubuntu-latest
-  # call-reusable-workflow:
-    # uses: ./.github/workflows/actions/detect-changes.yml
-    # uses: ./.github/actions/detect-changes/action.yml@feat/upgrade
-    # with:
-    #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   COMMON_PATH: 'common'
-    #   ENV_PATH: 'env'
-    #   REPO_PATH: 'nginx-action'
 
     steps:
       - name: Checkout
@@ -36,7 +28,6 @@ jobs:
           version: v3.14.4
 
       - name: Check for changed files
-        # uses: ./github/actions/detect-changes/action.yml
         uses: buffdeveloper/nginx-actions/.github/actions/detect-changes@feat/upgrade
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
