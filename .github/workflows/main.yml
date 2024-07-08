@@ -1,4 +1,5 @@
-name: Deploy NGINX Helm Chart with Quarkus Build
+name: Deploy NGINX Helm Chart
+run-name: ${{ github.actor }} - ${{ github.event_name }} - ${{ github.event.pull_request.number }} is running
 
 on:
   pull_request:
