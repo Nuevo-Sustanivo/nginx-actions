@@ -35,7 +35,7 @@ jobs:
           version: v3.14.4
 
       - name: Check for changed files
-        uses: ././github/workflows/actions/detect-changes.yml
+        uses: ././github/workflows/detect-changes.yml
         # uses: buffdeveloper/nginx-actions/.github/workflows/actions/detect-changes.yml@dfeat/upgrade
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -46,7 +46,7 @@ jobs:
       - name: List files with changes
         run: |
           ls -l action-space/files_with_changes
-          FILE_LIST=$(ls -1 mda-domain/files_with_changes)
+          FILE_LIST=$(ls -1 action-space/files_with_changes)
           echo "file_list=$FILE_LIST" >> $GITHUB_OUTPUT
         shell: bash
       

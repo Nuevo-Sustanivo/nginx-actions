@@ -27,8 +27,6 @@ jobs:
     outputs:
       changes-common: ${{ steps.changes.outputs.changes-common }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
       - name: Detect Changes for common
         uses: dorny/paths-filter@v2
         id: changes
@@ -47,8 +45,6 @@ jobs:
     outputs:
         dev: ${{ needs.changes-dev.outputs.dev }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
       - name: Detect Changes for dev
         uses: dorny/paths-filter@v2
         id: changes
