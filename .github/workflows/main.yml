@@ -40,6 +40,7 @@ jobs:
           ls -l nginx-action/files_with_changes
           FILE_LIST=$(ls -1 nginx-action/files_with_changes)
           echo "file_list=$FILE_LIST" >> $GITHUB_OUTPUT
+          echo $GITHUB_OUTPUT
         shell: bash
       
       - name: Create KinD cluster
