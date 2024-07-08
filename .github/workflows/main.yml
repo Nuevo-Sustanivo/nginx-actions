@@ -51,7 +51,7 @@ jobs:
 
       - name: List deleted files
         run: |
-          ls -l nginx-action/files_removed
+          ls -l nginx-action/files_with_changes
         shell: bash        
 
       - name: Create KinD cluster

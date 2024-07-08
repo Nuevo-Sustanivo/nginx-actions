@@ -32,12 +32,12 @@ runs:
       fi
 
 
-      mkdir -p files_removed
-      # Safety check to ensure the 'files_removed' directory was created successfully
-      if [ -d "files_removed" ]; then
-        echo "Directory 'files_removed' created successfully"
+      mkdir -p files_with_changes
+      # Safety check to ensure the 'files_with_changes' directory was created successfully
+      if [ -d "files_with_changes" ]; then
+        echo "Directory 'files_with_changes' created successfully"
       else
-        echo "Failed to create directory 'files_removed'"
+        echo "Failed to create directory 'files_with_changes'"
         exit 1
       fi
       # fetch all files from common directory
@@ -48,7 +48,7 @@ runs:
         cat common.txt
 
         while IFS= read -r line; do
-          cp $line files_removed
+          cp $line files_with_changes
         done < common.txt
       fi
 
@@ -60,14 +60,14 @@ runs:
         cat env.txt
 
         while IFS= read -r line; do
-          cp $line files_removed
+          cp $line files_with_changes
         done < env.txt
       fi
 
       # if no specific target passed and all files with changes need
       if [ ! -n "$common" ] && [ ! -n "$env" ]; then
         while IFS= read -r line; do
-          cp $line files_removed
+          cp $line files_with_changes
         done < deleted_files.txt
 
         echo "all deleted files"
