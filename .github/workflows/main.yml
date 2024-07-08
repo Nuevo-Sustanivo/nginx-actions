@@ -35,7 +35,7 @@ jobs:
           version: v3.14.4
 
       - name: Check for changed files
-        uses: ././github/workflows/detect-changes.yml
+        uses: ././github/workflows/actions/detect-changes/action.yml
         # uses: buffdeveloper/nginx-actions/.github/workflows/actions/detect-changes.yml@dfeat/upgrade
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
