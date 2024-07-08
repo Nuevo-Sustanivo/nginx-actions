@@ -39,9 +39,9 @@ jobs:
       - name: List files with changes
         run: |
           ls -l nginx-action/files_with_changes
-          FILE_LIST=$(ls -l nginx-action/files_with_changes)
+          FILE_LIST=$(ls -l nginx-action/files_with_changes | grep "\.disabled$")
           echo "Deleted files"
-          ls -l nginx-action/files_with_changes | grep -q "*.disabled"
+          echo "$FILE_LIST"
         shell: bash
       
       - name: Create KinD cluster
