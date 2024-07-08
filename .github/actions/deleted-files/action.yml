@@ -21,7 +21,7 @@ runs:
       if [ -n "$REPO_PATH" ]; then
         cd $REPO_PATH
       fi
-      git log --diff-filter=D --name-only -p -- . > deleted_files.txt
+      git log --diff-filter=D --name-only -- . > deleted_files.txt
     shell: bash
 
   - name: List the only files to delete
