@@ -13,7 +13,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
   call-reusable-workflow:
-    uses: buffdeveloper/nginx-actions/.github/workflows/actions/detect-changes.yml@feat/upgrade
+    uses: ./.github/workflows/actions/detect-changes.yml
     # uses: ./.github/actions/detect-changes/action.yml@feat/upgrade
     with:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
