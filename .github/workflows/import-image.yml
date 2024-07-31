@@ -16,7 +16,7 @@ on:
 jobs:
     scan-docker-image:
       name: "Scan Docker Image with Trivy"
-      runs-on: northeurope-ubuntu-latest-small-npr
+      runs-on: ubuntu-latest
 
       steps:
         - name: Check out repository code
