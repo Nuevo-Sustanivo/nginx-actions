@@ -25,7 +25,7 @@ jobs:
         - name: Run Trivy vulnerability scanner for a Docker image
           uses: aquasecurity/trivy-action@0.24.0
           with:
-            image-ref: 'docker.io/grafana/grafana:11.0.0'
+            image-ref: 'docker.io/grafana/grafana:9.2.15'
             format: 'sarif'
             ignore-unfixed: true # ignore vulnerabilities that have no fix
             severity: 'CRITICAL,HIGH'
