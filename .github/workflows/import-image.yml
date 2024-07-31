@@ -23,7 +23,7 @@ jobs:
           uses: actions/checkout@v4
       
         - name: Run Trivy vulnerability scanner for a Docker image
-          uses: aquasecurity/trivy-action@v0.24.0
+          uses: aquasecurity/trivy-action@v0.1.0
           with:
             image-ref: 'docker.io/grafana/grafana:11.0.0'
             format: 'sarif'
