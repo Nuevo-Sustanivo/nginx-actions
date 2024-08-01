@@ -72,7 +72,7 @@ jobs:
     - name: Build code
       run: |
         if [[ "${{ matrix.language }}" == "java" ]]; then
-            cd grpc-plain-text-quickstart
+            cd code-with-quarkus
             ./mvnw clean install
         fi
     # If the analyze step fails for one of the languages you are analyzing with
