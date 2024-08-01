@@ -73,7 +73,7 @@ jobs:
       run: |
         if [[ "${{ matrix.language }}" == "java" ]]; then
             cd grpc-plain-text-quickstart
-          ./mvnw clean install
+            ./mvnw clean install
         fi
     # If the analyze step fails for one of the languages you are analyzing with
     # "We were unable to automatically build your code", modify the matrix above
