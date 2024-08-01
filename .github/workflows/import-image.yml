@@ -1,4 +1,4 @@
-name: "Import Images to ACR"
+name: "Import Images"
 run-name: ${{ github.actor }} is Import Images to ACR 🚀
 
 on:
