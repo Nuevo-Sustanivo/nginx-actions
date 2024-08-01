@@ -1,0 +1,39 @@
+name: "Import Images to ACR"
+run-name: ${{ github.actor }} is Import Images to ACR 🚀
+
+on:
+  pull_request:
+    branches:
+    - main
+    paths:
+    - .github/workflows/import-image.yml
+    types:
+    - opened
+    - reopened
+    - synchronize
+    - closed
+
+jobs:
+    scan-docker-image:
+      name: "Scan Docker Image with Trivy"
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Check out repository code
+          uses: actions/checkout@v4
+      
+        - name: Run Trivy vulnerability scanner for a Docker image
+          uses: aquasecurity/trivy-action@0.24.0
+          with:
+            image-ref: 'tomcat:11.0-jdk21-temurin-jammy'
+            format: 'sarif'
+            ignore-unfixed: true # ignore vulnerabilities that have no fix
+            severity: 'CRITICAL,HIGH'
+            # trivy-config: 'resources/pipelines/deployment/import-images/trivy.yaml'
+            output: 'trivy-results.sarif'
+
+        - name: Upload Trivy scan results to GitHub Security tab
+          uses: github/codeql-action/upload-sarif@v2
+          if: always()
+          with:
+            sarif_file: 'trivy-results.sarif'

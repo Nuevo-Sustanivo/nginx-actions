@@ -23,7 +23,7 @@ runs:
       fi
       PR_NUMBER=${{ github.event.pull_request.number }}
       gh pr diff $PR_NUMBER --name-only > changed_files.txt
-      git log --diff-filter=D -- *.txt
+      git log --diff-filter=D --name-only -p -- $REPO_PATH > deleted_files.txt
     shell: bash
   - name: List the only files to deploy
     run: |
@@ -66,5 +66,49 @@ runs:
 
         echo "all files with chnages"
         ls -lrt changed_files.txt
+      fi
+    shell: bash
+
+  - name: List the only files to deploy
+    run: |
+      REPO_PATH=${{ inputs.REPO_PATH }}
+      if [ -n "$REPO_PATH" ]; then
+        cd $REPO_PATH
+      fi
+
+
+      mkdir files_removed
+      # fetch all files from common directory
+      common=${{ inputs.COMMON_PATH }}
+      if grep -q "$common" deleted_files.txt && [ -n "$common" ]; then
+        echo "list all files with a change under the path: $common"
+        grep "$common" deleted_files.txt > common.txt
+        cat common.txt
+
+        while IFS= read -r line; do
+          cp $line files_removed
+        done < common.txt
+      fi
+
+      # fetch all files from env directory
+      env=${{ inputs.ENV_PATH }}
+      if grep -q "$env" deleted_files.txt && [ -n "$env" ]; then
+        echo "list all files with a change under the path: $env"
+        grep "$env" deleted_files.txt > env.txt
+        cat env.txt
+
+        while IFS= read -r line; do
+          cp $line files_removed
+        done < env.txt
+      fi
+
+      # if no specific target passed and all files with changes need
+      if [ ! -n "$common" ] && [ ! -n "$env" ]; then
+        while IFS= read -r line; do
+          cp $line files_removed
+        done < deleted_files.txt
+
+        echo "all files with chnages"
+        ls -lrt deleted_files.txt
       fi
     shell: bash

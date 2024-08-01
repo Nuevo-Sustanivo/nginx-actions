@@ -39,10 +39,21 @@ jobs:
       - name: List files with changes
         run: |
           ls -l nginx-action/files_with_changes
-          FILE_LIST=$(ls -1 nginx-action/files_with_changes)
-          
         shell: bash
-      
+
+      - name: Check for deleted files
+        uses: buffdeveloper/nginx-actions/.github/actions/deleted-files@feat/upgrade
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMON_PATH: 'common'
+          ENV_PATH: 'env'
+          REPO_PATH: 'nginx-action'
+
+      - name: List deleted files
+        run: |
+          ls -l nginx-action/files_with_changes
+        shell: bash        
+
       - name: Create KinD cluster
         uses: helm/kind-action@v1.10.0
       
