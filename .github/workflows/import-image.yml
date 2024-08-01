@@ -33,7 +33,7 @@ jobs:
             format: 'sarif'
             ignore-unfixed: true # ignore vulnerabilities that have no fix
             severity: 'CRITICAL,HIGH'
-            # trivy-config: 'resources/pipelines/deployment/import-images/trivy.yaml'
+            trivy-config: 'trivy.yaml'
             output: 'trivy-results.sarif'
 
         - name: Upload Trivy scan results to GitHub Security tab

@@ -1,0 +1,27 @@
+# trivy.yaml
+
+# Specify the image to scan
+# image: your-image-name:tag
+
+# Specify the output format
+# output:
+#   format: table
+
+# Specify the severity threshold
+# severity:
+#   - UNKNOWN
+#   - LOW
+#   - MEDIUM
+#   - HIGH
+#   - CRITICAL
+
+# Specify the exit code threshold
+# exitCode:
+#   threshold: 1
+
+# Specify the cache directory
+# cache:
+#   enabled: true
+#   path: /path/to/cache/directory
+
+ignorefile: .trivyignore
