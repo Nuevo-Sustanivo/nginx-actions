@@ -17,6 +17,10 @@ jobs:
     scan-docker-image:
       name: "Scan Docker Image with Trivy"
       runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        packages: read
+        actions: read
 
       steps:
         - name: Check out repository code
