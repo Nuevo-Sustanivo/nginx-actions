@@ -18,8 +18,8 @@ jobs:
       name: "Scan Docker Image with Trivy"
       runs-on: ubuntu-latest
       permissions:
-        # contents: read
-        # packages: read
+        contents: read
+        packages: read
         actions: read
 
       steps:
