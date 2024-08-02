@@ -27,6 +27,7 @@ jobs:
           uses: actions/checkout@v4
       
         - name: Run Trivy vulnerability scanner for a Docker image
+          id: trivy
           uses: aquasecurity/trivy-action@0.24.0
           with:
             image-ref: 'tomcat:9.0.90-jdk17-corretto'
@@ -42,3 +43,9 @@ jobs:
           if: always()
           with:
             sarif_file: 'trivy-results.sarif'
+
+        - name: Fail if vulnerabilities found
+          if: ${{ steps.trivy.outputs.exit-code == '1' }}
+          run: |
+            echo "This image cannot be imported given the vulnerabilities found"
+            exit 1
