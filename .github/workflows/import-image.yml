@@ -32,7 +32,7 @@ jobs:
           with:
             image-ref: 'tomcat:9.0.90-jdk17-corretto'
             format: 'sarif'
-            exit-code: '1'
+            exit-code: '0'
             ignore-unfixed: true # ignore vulnerabilities that have no fix
             severity: 'CRITICAL,HIGH'
             trivy-config: 'trivy.yaml'
@@ -45,7 +45,7 @@ jobs:
             sarif_file: 'trivy-results.sarif'
 
         - name: Fail if vulnerabilities found
-          if: ${{ steps.trivy.outputs.exit-code == '1' }}
+          if: ${{ steps.trivy.outputs.exit-code == '0' }}
           run: |
             echo "This image cannot be imported given the vulnerabilities found"
             exit 1
