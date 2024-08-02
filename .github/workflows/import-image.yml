@@ -31,6 +31,7 @@ jobs:
           with:
             image-ref: 'tomcat:9.0.90-jdk17-corretto'
             format: 'sarif'
+            exit-code: '1'
             ignore-unfixed: true # ignore vulnerabilities that have no fix
             severity: 'CRITICAL,HIGH'
             trivy-config: 'trivy.yaml'
