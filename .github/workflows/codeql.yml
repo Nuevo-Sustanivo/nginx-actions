@@ -71,7 +71,7 @@ jobs:
     - name: Ensure Java 21 is available
       uses: actions/setup-java@v2
       with:
-      java-version: 21
+        java-version: '21'
     # Build the code before analyzing
     - name: Build code
       run: |
