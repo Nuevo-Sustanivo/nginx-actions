@@ -68,11 +68,16 @@ jobs:
 
         # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
         # queries: security-extended,security-and-quality
+    - name: Ensure Java 21 is available
+      uses: actions/setup-java@v2
+      with:
+      java-version: 21
     # Build the code before analyzing
     - name: Build code
       run: |
         if [[ "${{ matrix.language }}" == "java" ]]; then
             cd code-with-quarkus
+            export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
             ./mvnw clean install
         fi
     # If the analyze step fails for one of the languages you are analyzing with
