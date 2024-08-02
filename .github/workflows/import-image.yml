@@ -1,5 +1,5 @@
 name: "Import Images"
-run-name: ${{ github.actor }} is Import Images to ACR 🚀
+run-name: ${{ github.actor }} is Import Images 🚀
 
 on:
   pull_request:
