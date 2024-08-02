@@ -78,7 +78,6 @@ jobs:
       run: |
         if [[ "${{ matrix.language }}" == "java" ]]; then
             cd code-with-quarkus
-            export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
             ./mvnw clean install
         fi
     # If the analyze step fails for one of the languages you are analyzing with
