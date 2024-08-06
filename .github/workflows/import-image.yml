@@ -36,7 +36,7 @@ jobs:
             ignore-unfixed: true # ignore vulnerabilities that have no fix
             severity: 'CRITICAL,HIGH'
             # trivy-config: '/trivy/trivy.yaml'
-            trivyignores: 'trivy/.trivyignore'
+            ignorefile: 'trivy/.trivyignore'
             output: 'trivy-results.sarif'
 
         - name: Upload Trivy scan results to GitHub Security tab
