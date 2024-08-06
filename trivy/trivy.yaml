@@ -24,4 +24,4 @@
 #   enabled: true
 #   path: /path/to/cache/directory
 
-ignorefile: .trivyignore
+ignorefile: trivy/.trivyignore

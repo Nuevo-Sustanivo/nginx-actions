@@ -35,7 +35,7 @@ jobs:
             exit-code: '0'
             ignore-unfixed: true # ignore vulnerabilities that have no fix
             severity: 'CRITICAL,HIGH'
-            trivy-config: 'trivy.yaml'
+            trivy-config: 'trivy/trivy.yaml'
             # trivyignores: '.trivyignore'
             output: 'trivy-results.sarif'
 
