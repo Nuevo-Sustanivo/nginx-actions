@@ -25,9 +25,17 @@ jobs:
       steps:
         - name: Check out repository code
           uses: actions/checkout@v4
-          with:
-            fetch-depth: 0
       
+        - name: Check trivyignore
+          run: |
+            if [ -f trivy/.trivyignore ]; then
+              echo "trivyignore file found"
+              cat trivy/.trivyignore
+            else
+              echo "trivyignore file not found"
+            fi
+            
+
         - name: Run Trivy vulnerability scanner for a Docker image
           id: trivy
           uses: aquasecurity/trivy-action@0.24.0
@@ -38,6 +46,7 @@ jobs:
             ignore-unfixed: true # ignore vulnerabilities that have no fix
             severity: 'CRITICAL,HIGH'
             trivy-config: 'trivy/trivy.yaml'
+            scan-type: 
             # ignorefile: 'trivy/.trivyignore'
             output: 'trivy-results.sarif'
 
