@@ -45,7 +45,6 @@ jobs:
             ignore-unfixed: true # ignore vulnerabilities that have no fix
             severity: 'HIGH,CRITICAL'
             scanners: 'vuln'
-            # trivy-config: 'trivy/trivy.yaml'
             output: 'trivy-results.sarif'
             trivyignores: 'trivy/.trivyignore'
 
@@ -54,6 +53,7 @@ jobs:
           if: always()
           with:
             sarif_file: 'trivy-results.sarif'
+            category: 'Container Scanning'
 
         - name: Fail if vulnerabilities found
           if: ${{ steps.trivy.outputs.exit-code == '1' }}
