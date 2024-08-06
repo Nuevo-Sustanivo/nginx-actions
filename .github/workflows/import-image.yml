@@ -39,7 +39,7 @@ jobs:
           id: trivy
           uses: aquasecurity/trivy-action@0.24.0
           with:
-            image-ref: 'idealista/prom2teams:4.2.1'
+            image-ref: 'buffdeveloper/vuln-test-image:1.0'
             format: 'sarif'
             exit-code: '0'
             ignore-unfixed: true # ignore vulnerabilities that have no fix
