@@ -30,7 +30,7 @@ jobs:
           run: |
             if [ -f trivy/.trivyignore ]; then
               echo "trivyignore file found"
-              cat trivy/.trivyignore
+              # cat trivy/.trivyignore
             else
               echo "trivyignore file not found"
             fi
