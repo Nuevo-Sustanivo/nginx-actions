@@ -41,7 +41,6 @@ jobs:
           with:
             image-ref: 'buffdeveloper/vuln-test-image:1.0'
             format: 'sarif'
-            exit-code: '1'
             ignore-unfixed: true # ignore vulnerabilities that have no fix
             severity: 'HIGH,CRITICAL'
             scanners: 'vuln'
@@ -56,7 +55,7 @@ jobs:
             category: 'Container Scanning'
 
         - name: Fail if vulnerabilities found
-          if: ${{ steps.trivy.outputs.exit-code == '1' }}
+          if: ${{ steps.trivy.outputs.exit-code == '0' }}
           run: |
             echo "This image cannot be imported given the critical/high vulnerabilities found"
             exit 1
