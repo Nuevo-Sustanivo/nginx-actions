@@ -40,12 +40,12 @@ jobs:
           uses: aquasecurity/trivy-action@0.24.0
           with:
             image-ref: 'buffdeveloper/vuln-test-image:1.0'
-            format: 'sarif'
+            format: 'table'
             exit-code: '0'
             ignore-unfixed: true # ignore vulnerabilities that have no fix
             severity: 'HIGH,CRITICAL'
             scanners: 'vuln'
-            output: 'trivy-results.sarif'
+            # output: 'trivy-results.sarif'
             trivyignores: 'trivy/.trivyignore'
 
         - name: Upload Trivy scan results to GitHub Security tab
