@@ -44,7 +44,7 @@ jobs:
             ignore-unfixed: true # ignore vulnerabilities that have no fix
             severity: 'HIGH,CRITICAL'
             scanners: 'vuln'
-            exit-code: 2
+            exit-code: '2'
             output: 'trivy-results.sarif'
             trivyignores: 'trivy/.trivyignore'
 
