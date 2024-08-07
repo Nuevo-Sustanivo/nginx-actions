@@ -55,11 +55,11 @@ jobs:
             sarif_file: 'trivy-results.sarif'
             category: 'Container Scanning'
 
-        # - name: Fail if vulnerabilities found
-        #   if: ${{ steps.trivy.outputs.exit-code == '0' }}
-        #   run: |
-        #     echo "This image cannot be imported given the critical/high vulnerabilities found"
-        #     exit 1
+        - name: Fail if vulnerabilities found
+          if: ${{ steps.trivy.outputs.exit-code == '0' }}
+          run: |
+            echo "This image cannot be imported given the critical/high vulnerabilities found"
+            exit 1
 
         - name: Import image to Azure Container Registry
           if: ${{ steps.trivy.outputs.exit-code == '0' }}
