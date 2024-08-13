@@ -44,8 +44,8 @@ jobs:
             ignore-unfixed: true # ignore vulnerabilities that have no fix
             severity: 'CRITICAL,HIGH'
             scanners: 'vuln'
-            scan-type: 'image'
-            vuln-type: 'os,library'
+            # scan-type: 'image'
+            # vuln-type: 'os,library'
             exit-code: '1'
             output: 'trivy-results.sarif'
             trivyignores: 'trivy/.trivyignore'
