@@ -39,7 +39,7 @@ jobs:
           id: trivy
           uses: aquasecurity/trivy-action@0.24.0
           with:
-            image-ref: 'grafana/grafana:main'
+            image-ref: 'tomcat:9.0.90-jdk17-corretto-al2'
             format: 'sarif'
             ignore-unfixed: true # ignore vulnerabilities that have no fix
             severity: 'CRITICAL,HIGH'
