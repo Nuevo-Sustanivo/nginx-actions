@@ -39,14 +39,14 @@ jobs:
           id: trivy
           uses: aquasecurity/trivy-action@0.24.0
           with:
-            image-ref: 'tomcat:9.0.90-jdk17-corretto-al2'
+            image-ref: 'buffdeveloper/vuln-test-image:1.0'
             format: 'sarif'
             ignore-unfixed: true # ignore vulnerabilities that have no fix
             severity: 'CRITICAL,HIGH'
             scanners: 'vuln'
             # scan-type: 'image'
             # vuln-type: 'os,library'
-            exit-code: '2'
+            exit-code: '3'
             output: 'trivy-results.sarif'
             trivyignores: 'trivy/.trivyignore'
           
@@ -58,7 +58,7 @@ jobs:
             category: 'Container Scanning'
 
         - name: Fail if vulnerabilities found
-          if: ${{ steps.trivy.outputs.exit-code == '2' }}
+          if: ${{ steps.trivy.outputs.exit-code == '3' }}
           run: |
             echo "This image cannot be imported given the critical/high vulnerabilities found"
             echo "Please fix the vulnerabilities and try again"
