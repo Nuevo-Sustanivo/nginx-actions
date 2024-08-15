@@ -46,12 +46,12 @@ jobs:
             scanners: 'vuln'
             exit-code: '0'
             output: 'trivy-results.sarif'
-            trivyignores: 'trivy/.trivyignore'
+            # trivyignores: 'trivy/.trivyignore'
           
         - name: Fail if vulnerabilities found
           if: ${{ steps.trivy.outputs.exit-code == '0' }}
           run: |
-            head trivy-results.sarif
+            cat trivy-results.sarif
             if grep -q '"severity": "HIGH"' trivy-results.sarif || grep -q '"severity": "CRITICAL"' trivy-results.sarif; then
             echo "High or critical vulnerabilities found."
             exit 1
