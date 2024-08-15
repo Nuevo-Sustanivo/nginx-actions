@@ -46,7 +46,7 @@ jobs:
             scanners: 'vuln'
             exit-code: '0'
             output: 'trivy-results.sarif'
-            # trivyignores: 'trivy/.trivyignore'
+            trivyignores: 'trivy/.trivyignore'
           
         - name: Fail if vulnerabilities found
           if: ${{ steps.trivy.outputs.exit-code == '0' }}
