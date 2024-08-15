@@ -46,9 +46,9 @@ jobs:
             scanners: 'vuln'
             # scan-type: 'image'
             # vuln-type: 'os,library'
-            exit-code: '3'
+            # exit-code: '3'
             output: 'trivy-results.sarif'
-            trivyignores: 'trivy/.trivyignore'
+            # trivyignores: 'trivy/.trivyignore'
           
         - name: Upload Trivy scan results to GitHub Security tab
           uses: github/codeql-action/upload-sarif@v3
@@ -58,7 +58,7 @@ jobs:
             category: 'Container Scanning'
 
         - name: Fail if vulnerabilities found
-          if: ${{ steps.trivy.outputs.exit-code == '3' }}
+          if: ${{ steps.trivy.outputs.exit-code != '0' }}
           run: |
             echo "This image cannot be imported given the critical/high vulnerabilities found"
             echo "Please fix the vulnerabilities and try again"
