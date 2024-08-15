@@ -46,7 +46,7 @@ jobs:
             scanners: 'vuln'
             # scan-type: 'image'
             # vuln-type: 'os,library'
-            # exit-code: '1'
+            exit-code: '1'
             output: 'trivy-results.sarif'
             trivyignores: 'trivy/.trivyignore'
           
