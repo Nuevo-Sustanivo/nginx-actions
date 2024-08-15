@@ -46,15 +46,8 @@ jobs:
             scanners: 'vuln'
             exit-code: '0'
             output: 'trivy-results.sarif'
-            # trivyignores: 'trivy/.trivyignore'
+            trivyignores: 'trivy/.trivyignore'
           
-        - name: Upload Trivy scan results to GitHub Security tab
-          uses: github/codeql-action/upload-sarif@v3
-          if: always()
-          with:
-            sarif_file: 'trivy-results.sarif'
-            category: 'Container Scanning'
-
         - name: Fail if vulnerabilities found
           if: ${{ steps.trivy.outputs.exit-code == '0' }}
           run: |
@@ -64,6 +57,14 @@ jobs:
             else
               echo "No high or critical vulnerabilities found."
             fi
+            
+        - name: Upload Trivy scan results to GitHub Security tab
+          uses: github/codeql-action/upload-sarif@v3
+          if: always()
+          with:
+            sarif_file: 'trivy-results.sarif'
+            category: 'Container Scanning'
+
 
         - name: Import image to Azure Container Registry
           run: |
