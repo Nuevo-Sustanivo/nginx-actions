@@ -70,10 +70,10 @@ jobs:
           run: |
             # cat trivy-results.sarif
             if jq -e '.runs[].tool.driver.rules[] | select(.properties.tags[2] == "HIGH" or .properties.tags[2] == "CRITICAL")' trivy-results.sarif > /dev/null; then
-            echo "High or critical vulnerabilities found."
-            exit 1
+              echo "High or critical vulnerabilities found."
             else
               echo "No high or critical vulnerabilities found."
+              exit 1
             fi
 
         - name: Upload Trivy scan results to GitHub Security tab
