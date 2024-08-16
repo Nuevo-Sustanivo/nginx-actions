@@ -51,9 +51,19 @@ jobs:
         - name: Install jq
           run: sudo apt-get install -y jq
 
-        - name: Analyze SARIF file using jq
+        - name: Check for HIGH or CRITICAL vulnerabilities
+          id: check_vulnerabilities
           run: |
-            jq -e '.runs[].results[] | select(.properties.severity == "HIGH" or .properties.severity == "CRITICAL")' trivy-results.sarif > /dev/null || echo "No high or critical vulnerabilities found."
+            jq -e '.runs[].tool.driver.rules[] | select(.properties.tags | index("HIGH") or .properties.tags | index("CRITICAL"))' trivy-results.sarif > /dev/null
+          continue-on-error: true
+    
+        - name: Handle vulnerabilities
+          if: steps.check_vulnerabilities.outcome == 'success'
+          run: echo "High or critical vulnerabilities found."
+    
+        - name: No vulnerabilities found
+          if: steps.check_vulnerabilities.outcome != 'success'
+          run: echo "No high or critical vulnerabilities found."
 
         # - name: Fail if vulnerabilities found
         #   if: ${{ steps.trivy.outputs.exit-code == '0' }}
