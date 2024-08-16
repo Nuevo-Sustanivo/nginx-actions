@@ -40,12 +40,12 @@ jobs:
           uses: aquasecurity/trivy-action@0.24.0
           with:
             image-ref: 'buffdeveloper/vuln-test-image:1.0'
-            format: 'sarif'
+            format: 'json'
             ignore-unfixed: true # ignore vulnerabilities that have no fix
             severity: 'CRITICAL,HIGH'
             scanners: 'vuln'
             exit-code: '0'
-            output: 'trivy-results.sarif'
+            output: 'trivy-results.json'
             trivyignores: 'trivy/.trivyignore'
       
         - name: Install jq
@@ -54,8 +54,8 @@ jobs:
         - name: Check for HIGH or CRITICAL vulnerabilities
           id: check_vulnerabilities
           run: |
-            cat trivy-results.sarif > results.sarif
-            jq -r '.runs[].results[] | select(.message.text | contains("Severity: HIGH") or contains("Severity: CRITICAL")) | .message.text' results.sarif
+            jq -r '.Results[].Vulnerabilities[] | select(.Severity == "HIGH" or .Severity == "CRITICAL") | "\(.VulnerabilityID) \(.Severity)"' trivy-results.json
+            # jq -r '.runs[].results[] | select(.message.text | contains("Severity: HIGH") or contains("Severity: CRITICAL")) | .message.text' results.sarif
           continue-on-error: true
     
         # - name: Handle vulnerabilities
