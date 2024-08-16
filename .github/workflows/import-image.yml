@@ -54,7 +54,7 @@ jobs:
         - name: Check for HIGH or CRITICAL vulnerabilities
           id: check_vulnerabilities
           run: |
-            jq -r '.runs[].results[] | select(.message.text | contains("Severity: HIGH") or contains("Severity: CRITICAL")) | .message.text'
+            jq -r '.runs[].results[] | select(.message.text | contains("Severity: HIGH") or contains("Severity: CRITICAL")) | .message.text' trivy-results.sarif
           continue-on-error: true
     
         # - name: Handle vulnerabilities
