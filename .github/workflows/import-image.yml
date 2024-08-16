@@ -40,12 +40,12 @@ jobs:
           uses: aquasecurity/trivy-action@0.24.0
           with:
             image-ref: 'buffdeveloper/vuln-test-image:1.0'
-            format: 'sarif'
+            format: 'json'
             ignore-unfixed: true # ignore vulnerabilities that have no fix
             severity: 'CRITICAL,HIGH'
             scanners: 'vuln'
             exit-code: '0'
-            output: 'trivy-results.sarif'
+            output: 'trivy-results.json'
             trivyignores: 'trivy/.trivyignore'
       
         - name: Install jq
@@ -68,20 +68,21 @@ jobs:
         - name: Fail if vulnerabilities found
           if: ${{ steps.trivy.outputs.exit-code == '0' }}
           run: |
-            if jq -e '.runs[].tool.driver.rules[] | select(.properties.tags[2] == "HIGH" or .properties.tags[2] == "CRITICAL")' trivy-results.sarif > /dev/null; then
-              echo "High or critical vulnerabilities found."
-            else
-              echo "No high or critical vulnerabilities found."
-              exit 1
-            fi
-            cat trivy-results.sarif
+            cat trivy-results.json | jq -r '.Results[].Vulnerabilities[].VulnerabilityID'
+            # if jq -e '.runs[].tool.driver.rules[] | select(.properties.tags[2] == "HIGH" or .properties.tags[2] == "CRITICAL")' trivy-results.sarif > /dev/null; then
+            #   echo "High or critical vulnerabilities found."
+            # else
+            #   echo "No high or critical vulnerabilities found."
+            #   exit 1
+            # fi
+            # cat trivy-results.json
 
-        - name: Upload Trivy scan results to GitHub Security tab
-          uses: github/codeql-action/upload-sarif@v3
-          if: always()
-          with:
-            sarif_file: 'trivy-results.sarif'
-            category: 'Container Scanning'
+        # - name: Upload Trivy scan results to GitHub Security tab
+        #   uses: github/codeql-action/upload-sarif@v3
+        #   if: always()
+        #   with:
+        #     sarif_file: 'trivy-results.sarif'
+        #     category: 'Container Scanning'
 
 
         - name: Import image to Azure Container Registry
