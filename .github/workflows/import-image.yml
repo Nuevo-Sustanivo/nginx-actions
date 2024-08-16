@@ -54,7 +54,7 @@ jobs:
         - name: Check for HIGH or CRITICAL vulnerabilities
           id: check_vulnerabilities
           run: |
-            jq -e '.runs[].tool.driver.rules[] | select(.properties.tags | index("HIGH") or .properties.tags | index("CRITICAL"))' trivy-results.sarif > /dev/null
+            jq -e '.runs[].tool.driver.rules[] | select(.properties.tags[2] == "HIGH" or .properties.tags[2] == "CRITICAL")' trivy-results.sarif > /dev/null
           continue-on-error: true
     
         - name: Handle vulnerabilities
