@@ -51,30 +51,30 @@ jobs:
         - name: Install jq
           run: sudo apt-get install -y jq
 
-        - name: Check for HIGH or CRITICAL vulnerabilities
-          id: check_vulnerabilities
-          run: |
-            jq -e '.runs[].tool.driver.rules[] | select(.properties.tags[2] == "HIGH" or .properties.tags[2] == "CRITICAL")' trivy-results.sarif > /dev/null
-          continue-on-error: true
-    
-        - name: Handle vulnerabilities
-          if: steps.check_vulnerabilities.outcome == 'success'
-          run: echo "High or critical vulnerabilities found."
-    
-        - name: No vulnerabilities found
-          if: steps.check_vulnerabilities.outcome != 'success'
-          run: echo "No high or critical vulnerabilities found."
-
-        # - name: Fail if vulnerabilities found
-        #   if: ${{ steps.trivy.outputs.exit-code == '0' }}
+        # - name: Check for HIGH or CRITICAL vulnerabilities
+        #   id: check_vulnerabilities
         #   run: |
-        #     # cat trivy-results.sarif
-        #     if jq -e '.runs[].results[] | select(.properties.severity == "HIGH" or .properties.severity == "CRITICAL")' trivy-results.sarif > /dev/null; then
-        #     echo "High or critical vulnerabilities found."
-        #     exit 1
-        #     else
-        #       echo "No high or critical vulnerabilities found."
-        #     fi
+        #     jq -e '.runs[].tool.driver.rules[] | select(.properties.tags[2] == "HIGH" or .properties.tags[2] == "CRITICAL")' trivy-results.sarif > /dev/null
+        #   continue-on-error: true
+    
+        # - name: Handle vulnerabilities
+        #   if: steps.check_vulnerabilities.outcome == 'success'
+        #   run: echo "High or critical vulnerabilities found."
+    
+        # - name: No vulnerabilities found
+        #   if: steps.check_vulnerabilities.outcome != 'success'
+        #   run: echo "No high or critical vulnerabilities found."
+
+        - name: Fail if vulnerabilities found
+          if: ${{ steps.trivy.outputs.exit-code == '0' }}
+          run: |
+            # cat trivy-results.sarif
+            if jq -e '.runs[].tool.driver.rules[] | select(.properties.tags[2] == "HIGH" or .properties.tags[2] == "CRITICAL")' trivy-results.sarif > /dev/null; then
+            echo "High or critical vulnerabilities found."
+            exit 1
+            else
+              echo "No high or critical vulnerabilities found."
+            fi
 
         - name: Upload Trivy scan results to GitHub Security tab
           uses: github/codeql-action/upload-sarif@v3
