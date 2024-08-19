@@ -55,8 +55,11 @@ jobs:
           id: check_vulnerabilities
           run: |
             # Extract VulnerabilityID values using jq and save to a temporary file
-            jq -r '.Results[]?.Vulnerabilities[]?.VulnerabilityID // empty' trivy-results.json > extracted_vulnerabilities.txt
+            jq -r '.Results[]?.Vulnerabilities[]?.VulnerabilityID // empty' trivy-results.json | sort | uniq > extracted_vulnerabilities.txt
 
+            # Remove duplicates from the .trivyignore file and save to a temporary file
+            sort trivy/.trivyignore | uniq > trivyignore_unique.txt
+            
             # Compare the extracted vulnerabilities against the .trivyignore file
             if grep -Fxvf trivy/.trivyignore extracted_vulnerabilities.txt; then
               echo "Found vulnerabilities not listed in .trivyignore"
