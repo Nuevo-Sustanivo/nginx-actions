@@ -55,7 +55,7 @@ jobs:
           id: check_vulnerabilities
           run: |
             # Extract VulnerabilityID values using jq and save to a temporary file
-            jq -r '.Results[].Vulnerabilities[].VulnerabilityID' trivy-results.json > extracted_vulnerabilities.txt
+            jq -r '.Results[]?.Vulnerabilities[]?.VulnerabilityID // empty' trivy-results.json > extracted_vulnerabilities.txt
 
             # Compare the extracted vulnerabilities against the .trivyignore file
             if grep -Fxvf trivy/.trivyignore extracted_vulnerabilities.txt; then
