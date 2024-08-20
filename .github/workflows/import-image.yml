@@ -13,8 +13,8 @@ on:
     - synchronize
     - closed
 
-env:
-  IMAGE_REF: hello-world:latest
+# env:
+#   IMAGE_REF: hello-world:latest
 
 jobs:
     scan-docker-image:
