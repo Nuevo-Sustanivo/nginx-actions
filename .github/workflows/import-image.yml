@@ -13,9 +13,6 @@ on:
     - synchronize
     - closed
 
-# env:
-#   IMAGE_REF: hello-world:latest
-
 jobs:
     scan-docker-image:
       name: "Scan Docker Image with Trivy"
