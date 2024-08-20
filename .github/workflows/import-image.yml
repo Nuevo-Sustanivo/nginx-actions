@@ -79,6 +79,8 @@ jobs:
             docker image ls
             echo "Show in ACR"
             REPO_NAME=$(echo $IMAGE_NAME | awk -F '/' '{print $2}')
-            echo $REPO_NAME
+            IMAGE=$(echo ${{ env.IMAGE_REF }} | awk -F '/' '{print $NF}' | cut -d':' -f1)
+            
+            echo $REPO_NAME/$IMAGE
             
            
