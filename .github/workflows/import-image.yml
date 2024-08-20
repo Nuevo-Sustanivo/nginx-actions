@@ -13,6 +13,9 @@ on:
     - synchronize
     - closed
 
+env:
+  IMAGE_REF: /image-list.txt
+
 jobs:
     scan-docker-image:
       name: "Scan Docker Image with Trivy"
@@ -39,7 +42,7 @@ jobs:
           id: trivy
           uses: aquasecurity/trivy-action@0.24.0
           with:
-            image-ref: 'buffdeveloper/vuln-test-image:1.0'
+            image-ref: '${{ env.IMAGE_REF }}'
             format: 'json'
             ignore-unfixed: true # ignore vulnerabilities that have no fix
             severity: 'CRITICAL,HIGH'
