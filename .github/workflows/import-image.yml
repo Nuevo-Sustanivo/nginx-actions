@@ -78,7 +78,7 @@ jobs:
             docker tag ${{ env.IMAGE_REF }} azurecr.io/$IMAGE_NAME
             docker image ls
             echo "Show in ACR"
-            REPO_NAME=$(echo $IMAGE_NAME | awk -F '/' '{print $(NF-1)}')
+            REPO_NAME=$(echo $IMAGE_NAME | awk -F '/' '{print $2}')
             echo $REPO_NAME
             
            
