@@ -31,7 +31,8 @@ jobs:
       
         - name: Set image reference
           run: |
-            tail -n 1 image-list | awk '{print $1}' > ${{ env.IMAGE_REF }}
+            IMAGE_REF=$(tail -n 1 image-list | awk '{print $1}')
+            echo "IMAGE_REF=$IMAGE_REF" >> $GITHUB_ENV
             
 
         - name: Run Trivy vulnerability scanner for a Docker image
