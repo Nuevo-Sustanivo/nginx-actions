@@ -43,7 +43,6 @@ jobs:
             scanners: 'vuln'
             exit-code: '0'
             output: 'trivy-results.json'
-            # trivyignores: 'trivy/.trivyignore'
       
         - name: Install jq
           run: sudo apt-get install -y jq
@@ -69,34 +68,13 @@ jobs:
             # jq -r '.runs[].results[] | select(.message.text | contains("Severity: HIGH") or contains("Severity: CRITICAL")) | .message.text' results.sarif
           continue-on-error: true
     
-        # - name: Handle vulnerabilities
-        #   if: steps.check_vulnerabilities.outcome == 'success'
-        #   run: echo "High or critical vulnerabilities found."
-    
-        # - name: No vulnerabilities found
-        #   if: steps.check_vulnerabilities.outcome != 'success'
-        #   run: echo "No high or critical vulnerabilities found."
-
-        # - name: Fail if vulnerabilities found
-        #   if: ${{ steps.trivy.outputs.exit-code == '0' }}
-        #   run: |
-        #     cat trivy-results.json | jq -r '.Results[].Vulnerabilities[].VulnerabilityID'
-        #     # if jq -e '.runs[].tool.driver.rules[] | select(.properties.tags[2] == "HIGH" or .properties.tags[2] == "CRITICAL")' trivy-results.sarif > /dev/null; then
-        #     #   echo "High or critical vulnerabilities found."
-        #     # else
-        #     #   echo "No high or critical vulnerabilities found."
-        #     #   exit 1
-        #     # fi
-        #     # cat trivy-results.json
-
-        # - name: Upload Trivy scan results to GitHub Security tab
-        #   uses: github/codeql-action/upload-sarif@v3
-        #   if: always()
-        #   with:
-        #     sarif_file: 'trivy-results.sarif'
-        #     category: 'Container Scanning'
-
-
         - name: Import image to Azure Container Registry
           run: |
-           echo "Image will be imported to Azure Container Registry"
+            echo "Image will be imported"
+            
+            echo "Push image to ACR"
+            docker pull ${{env.IMAGE_REF}}
+            IMAGE_NAME=$(echo ${{ env.IMAGE_REF }} | awk -F '/' '{print $NF}')
+            docker tag ${{ env.IMAGE_REF }} azurecr.io/$IMAGE_NAME
+            
+           
