@@ -14,7 +14,7 @@ on:
     - closed
 
 env:
-  IMAGE_REF: /image-list.txt
+  IMAGE_REF: hello-world:latest
 
 jobs:
     scan-docker-image:
@@ -29,13 +29,9 @@ jobs:
         - name: Check out repository code
           uses: actions/checkout@v4
       
-        - name: Check trivyignore
+        - name: Set image reference
           run: |
-            if [ -f trivy/.trivyignore ]; then
-              echo "trivyignore file found"
-            else
-              echo "trivyignore file not found"
-            fi
+            tail -n 1 image-list | awk '{print $1}' > IMAGE_REF
             
 
         - name: Run Trivy vulnerability scanner for a Docker image
