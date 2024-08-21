@@ -74,14 +74,14 @@ jobs:
             
             echo "Push image to ACR"
             docker pull ${{env.IMAGE_REF}}
-            IMAGE_NAME=$(echo ${{ env.IMAGE_REF }} | awk -F '/' '{print $NF}')
+            IMAGE_NAME=${{env.IMAGE_REF}} #$(echo ${{ env.IMAGE_REF }} | awk -F '/' '{print $NF}')
             # docker tag ${{ env.IMAGE_REF }} azurecr.io/$IMAGE_NAME
             docker image ls
             echo "Show in ACR"
             
-            REPO_NAME=$(echo ${{ env.IMAGE_REF }} | awk -F '/' '{print $1}')
-            IMAGE=$(echo ${{ env.IMAGE_REF }} | awk -F '/' '{print $2}' | cut -d':' -f1)
-            TAG=(echo ${{ env.IMAGE_REF }} | awk -F ':' '{print $2}')
+            REPO_NAME=$(echo $IMAGE_NAME | awk -F '/' '{print $1}')
+            IMAGE=$(echo $IMAGE_NAME | awk -F '/' '{print $2}' | cut -d':' -f1)
+            TAG=(echo $IMAGE_NAME | awk -F ':' '{print $2}')
             echo "$REPO_NAME/$IMAGE:$TAG"
             
            
