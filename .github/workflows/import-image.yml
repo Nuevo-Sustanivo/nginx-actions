@@ -94,6 +94,7 @@ jobs:
             ACR_REPO_NAME="azurecr.io"
             echo "Repo: $REPO_NAME, Image: $IMAGE_NAME, Tag: $TAG"
             ACR_IMAGE="$ACR_REPO_NAME/$REPO_NAME/$IMAGE_NAME:$TAG"
+            echo "ACR Image: ACR_IMAGE"
             docker tag ${{ env.IMAGE_REF }} $ACR_IMAGE
             docker image ls
             
