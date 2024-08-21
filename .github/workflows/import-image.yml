@@ -79,9 +79,9 @@ jobs:
             docker image ls
             echo "Show in ACR"
             
-            REPO_NAME=$(echo "${{ env.IMAGE_REF }}" | awk -F '/' '{print $1}')
-            IMAGE=$(echo "${{ env.IMAGE_REF }}" | awk -F '/' '{print $2}' | cut -d':' -f1)
-            TAG=(echo "${{ env.IMAGE_REF }}" | awk -F ':' '{print $2}')
+            REPO_NAME=$(echo ${{ env.IMAGE_REF }} | awk -F '/' '{print $1}')
+            IMAGE=$(echo ${{ env.IMAGE_REF }} | awk -F '/' '{print $2}' | cut -d':' -f1)
+            TAG=(echo ${{ env.IMAGE_REF }} | awk -F ':' '{print $2}')
             echo "$REPO_NAME/$IMAGE:$TAG"
             
            
