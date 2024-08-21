@@ -75,7 +75,7 @@ jobs:
             echo "Push image to ACR"
             docker pull ${{env.IMAGE_REF}}
             IMAGE_NAME=$(echo ${{ env.IMAGE_REF }} | awk -F '/' '{print $NF}')
-            docker tag ${{ env.IMAGE_REF }} azurecr.io/$IMAGE_NAME
+            # docker tag ${{ env.IMAGE_REF }} azurecr.io/$IMAGE_NAME
             docker image ls
             echo "Show in ACR"
             
