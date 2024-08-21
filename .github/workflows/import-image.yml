@@ -71,7 +71,7 @@ jobs:
         - name: Import image to Azure Container Registry
           run: |
             echo "Image will be imported"
-            
+            docker image prune -f
             echo "Push image to ACR"
             docker pull ${{env.IMAGE_REF}}
             #IMAGE_NAME=$(echo ${{ env.IMAGE_REF }} | awk -F '/' '{print $NF}')
