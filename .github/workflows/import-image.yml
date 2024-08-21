@@ -80,10 +80,10 @@ jobs:
             echo "Show in ACR"
             IMAGE_NAME=$(echo ${{ env.IMAGE_REF }} | awk -F '/' '{print $NF}' | tr '_' '-')
             echo "Image: $IMAGE_NAME"
-            REPO_NAME=$(echo $IMAGE_NAME | awk -F '/' '{print $1}') 
+            REPO_NAME=$(echo ${{ env.IMAGE_REF }} | awk -F '/' '{print $1}') 
             echo "Repo: $REPO_NAME"
             #IMAGE=$(echo $IMAGE_NAME | awk -F '/' '{print $2}' | cut -d':' -f1)
-            TAG=(echo $IMAGE_NAME | awk -F ':' '{print $2}')
+            TAG=(echo ${{ env.IMAGE_REF }}| awk -F ':' '{print $2}')
             echo "TAG: $TAG"
             #REPO_NAME=$(echo $IMAGE_NAME | awk -F '/' '{print $1}')
             #echo "$REPO_NAME/$IMAGE:$TAG"
