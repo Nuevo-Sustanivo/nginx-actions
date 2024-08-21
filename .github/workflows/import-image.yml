@@ -91,9 +91,10 @@ jobs:
             # Extract the portion after the ":"
             TAG=$(echo "${{ env.IMAGE_REF }}" | awk -F ':' '{print $2}')
             echo "TAG=$TAG" >> $GITHUB_ENV
-            
+            ACR_REPO_NAME="azurecr.io"
             echo "Repo: $REPO_NAME, Image: $IMAGE_NAME, Tag: $TAG"
-            docker tag ${{ env.IMAGE_REF }} azurecr.io/$REPO_NAME/$IMAGE_NAME:$TAG
+            ACR_IMAGE="$ACR_REPO_NAME/$REPO_NAME/$IMAGE_NAME:$TAG"
+            docker tag ${{ env.IMAGE_REF }} $ACR_IMAGE
             docker image ls
             
         - name: Just echo
