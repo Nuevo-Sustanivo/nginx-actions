@@ -81,14 +81,16 @@ jobs:
             input="${{ env.IMAGE_REF }}"
   
             # Extract the word before the second "/"
-            REPO_NAME=$(echo "$input" | awk -F '/' '{print $2}')
+            REPO_NAME=$(echo "${{ env.IMAGE_REF }}" | awk -F '/' '{print $2}')
             
             # Extract the word after the second "/" and before the ":"
-            IMAGE_NAME=$(echo "$input" | awk -F '/' '{print $3}' | cut -d':' -f1)
+            IMAGE_NAME=$(echo "${{ env.IMAGE_REF }}" | awk -F '/' '{print $3}' | cut -d':' -f1)
             
             # Extract the portion after the ":"
-            TAG=$(echo "$input" | awk -F ':' '{print $2}')
+            TAG=$(echo "${{ env.IMAGE_REF }}" | awk -F ':' '{print $2}')
             
             echo "Repo: $REPO_NAME, Image: $IMAGE_NAME, Tag: $TAG"
+            docker tag ${{ env.IMAGE_REF }} azurecr.io/$REPO_NAME/$IMAGE_NAME:$TAG
+            docker image ls
             
            
