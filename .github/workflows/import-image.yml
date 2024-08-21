@@ -82,6 +82,6 @@ jobs:
             REPO_NAME=$(echo $IMAGE_NAME | awk -F '/' '{print $1}')
             IMAGE=$(echo $IMAGE_NAME | awk -F '/' '{print $2}' | cut -d':' -f1)
             TAG=(echo $IMAGE_NAME | awk -F ':' '{print $2}')
-            echo "$REPO_NAME/$IMAGE:$TAG"
+            #echo "$REPO_NAME/$IMAGE:$TAG"
             
            
