@@ -26,36 +26,81 @@ jobs:
         - name: Check out repository code
           uses: actions/checkout@v4
       
-        - name: Check trivyignore
+        - name: Set image reference
           run: |
-            if [ -f trivy/.trivyignore ]; then
-              echo "trivyignore file found"
-            else
-              echo "trivyignore file not found"
-            fi
+            IMAGE_REF=$(tail -n 1 image-list | awk '{print $1}')
+            echo "IMAGE_REF=$IMAGE_REF" >> $GITHUB_ENV
             
 
         - name: Run Trivy vulnerability scanner for a Docker image
           id: trivy
           uses: aquasecurity/trivy-action@0.24.0
           with:
-            image-ref: 'buffdeveloper/vuln-test-image:1.0'
-            format: 'sarif'
+            image-ref: '${{ env.IMAGE_REF }}'
+            format: 'json'
             ignore-unfixed: true # ignore vulnerabilities that have no fix
-            severity: 'HIGH,CRITICAL'
+            severity: 'CRITICAL,HIGH'
             scanners: 'vuln'
-            output: 'trivy-results.sarif'
-            trivyignores: 'trivy/.trivyignore'
+            exit-code: '0'
+            output: 'trivy-results.json'
+      
+        - name: Install jq
+          run: sudo apt-get install -y jq
 
-        - name: Upload Trivy scan results to GitHub Security tab
-          uses: github/codeql-action/upload-sarif@v3
-          if: always()
-          with:
-            sarif_file: 'trivy-results.sarif'
-            category: 'Container Scanning'
+        - name: Check for HIGH or CRITICAL vulnerabilities
+          id: check_vulnerabilities
+          run: |
+            # Extract VulnerabilityID values using jq and save to a temporary file
+            jq -r '.Results[]?.Vulnerabilities[]?.VulnerabilityID // empty' trivy-results.json | sort | uniq > extracted_vulnerabilities.txt
 
-        # - name: Fail if vulnerabilities found
-        #   if: ${{ steps.trivy.outputs.exit-code == '0' }}
-        #   run: |
-        #     echo "This image cannot be imported given the critical/high vulnerabilities found"
-        #     exit 1
+            # Remove duplicates from the .trivyignore file and save to a temporary file
+            sort trivy/.trivyignore | uniq > trivyignore_unique.txt
+            
+            # Compare the extracted vulnerabilities against the .trivyignore file
+            if grep -Fxvf trivy/.trivyignore extracted_vulnerabilities.txt; then
+              echo "Found vulnerabilities not listed in .trivyignore"
+              exit 1
+            else
+              echo "No unignored vulnerabilities found"
+            fi
+
+            #jq -r '.Results[].Vulnerabilities[] | select(.Severity == "HIGH" or .Severity == "CRITICAL") | "\(.VulnerabilityID) \(.Severity)"' trivy-results.json
+            # jq -r '.runs[].results[] | select(.message.text | contains("Severity: HIGH") or contains("Severity: CRITICAL")) | .message.text' results.sarif
+          continue-on-error: true
+    
+        - name: Import image to Azure Container Registry
+          id: import-image
+          if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged
+          run: |
+            echo "Image will be imported"
+            docker image prune -f
+            echo "Push image to ACR"
+            docker pull ${{env.IMAGE_REF}}
+            #IMAGE_NAME=$(echo ${{ env.IMAGE_REF }} | awk -F '/' '{print $NF}')
+            # docker tag ${{ env.IMAGE_REF }} azurecr.io/$IMAGE_NAME
+            docker image ls
+            echo "Show in ACR"
+            input="${{ env.IMAGE_REF }}"
+  
+            # Extract the word before the second "/"
+            REPO_NAME=$(echo "${{ env.IMAGE_REF }}" | awk -F '/' '{print $2}')
+            echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
+            
+            # Extract the word after the second "/" and before the ":"
+            IMAGE_NAME=$(echo "${{ env.IMAGE_REF }}" | awk -F '/' '{print $3}' | cut -d':' -f1)
+            echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+            
+            # Extract the portion after the ":"
+            TAG=$(echo "${{ env.IMAGE_REF }}" | awk -F ':' '{print $2}')
+            echo "TAG=$TAG" >> $GITHUB_ENV
+            ACR_REPO_NAME="azurecr.io"
+            echo "Repo: $REPO_NAME, Image: $IMAGE_NAME, Tag: $TAG"
+            ACR_IMAGE="$ACR_REPO_NAME/$REPO_NAME/$IMAGE_NAME:$TAG"
+            echo "ACR Image: $ACR_IMAGE"
+            docker tag ${{ env.IMAGE_REF }} $ACR_IMAGE
+            docker image ls
+            
+        - name: Just echo
+          run: |
+            echo "Repo: ${{ env.REPO_NAME }}, Image: ${{ env.IMAGE_NAME }}, Tag: ${{ env.TAG }}"
+        
