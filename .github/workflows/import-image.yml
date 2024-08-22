@@ -104,7 +104,3 @@ jobs:
           run: |
             echo "Repo: ${{ env.REPO_NAME }}, Image: ${{ env.IMAGE_NAME }}, Tag: ${{ env.TAG }}"
         
-        - name: Create Release
-          uses: .github/workflows/test.yml
-          needs: import-image
-          if: ${{ (success() || failure()) && (needs.import-image.result != 'skipped') }}
