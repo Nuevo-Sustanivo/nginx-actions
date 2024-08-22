@@ -112,7 +112,9 @@ jobs:
           actions: read
         needs: scan-docker-image
         steps:
+          - name: Check out repository code
+            uses: actions/checkout@v4
           - name: Create Release
-            uses: ./test.yml
+            uses: .github/workflows/test.yml
         
             if: ${{ (success() || failure()) && (needs.import-image.result != 'skipped') }}
