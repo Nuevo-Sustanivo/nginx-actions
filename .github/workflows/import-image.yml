@@ -104,7 +104,7 @@ jobs:
         
         
     release:
-        name: "Scan Docker Image with Trivy"
+        name: "Create Release"
         runs-on: ubuntu-latest
         permissions:
           security-events: write
