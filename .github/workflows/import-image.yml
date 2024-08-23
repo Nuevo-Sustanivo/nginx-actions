@@ -106,7 +106,7 @@ jobs:
     release:
       name: Create Release
       runs-on: ubuntu-latest
-      if: ${{ (success() || failure()) && (needs.scan-docker-image.result != 'skipped') }} 
+      if: ${{ (success() || failure()) && (needs.scan-docker-image.result != 'skipped') && github.event.pull_request.merged }} 
       needs: scan-docker-image
       permissions:
           id-token: write
