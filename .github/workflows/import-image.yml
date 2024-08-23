@@ -104,17 +104,16 @@ jobs:
         
         
     release:
-        name: "Create Release"
-        runs-on: ubuntu-latest
-        permissions:
-          security-events: write
-          contents: read
-          actions: read
-        needs: scan-docker-image
-        steps:
-          - name: Check out repository code
-            uses: actions/checkout@v4
-          - name: Create Release
-            uses: .github/workflows/test.yml
-        
-            if: ${{ (success() || failure()) && (needs.import-image.result != 'skipped') }}
+      name: Check for changed files
+      uses: buffdeveloper/nginx-actions/.github/actions/detect-changes@feat/upgrade
+      if: ${{ (success() || failure()) && (needs.scan-docker-image.result != 'skipped') &&  github.event.pull_request.merged }} 
+      needs: scan-docker-image
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COMMON_PATH: 'common'
+        ENV_PATH: 'env'
+        REPO_PATH: 'nginx-action'
+      
+      
+      
+      
