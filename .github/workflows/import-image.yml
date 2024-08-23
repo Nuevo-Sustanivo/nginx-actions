@@ -105,11 +105,9 @@ jobs:
         
     release:
       name: Setup Helm and Release
-      uses: azure/setup-helm@v4.2.0
+      runs-on: ubuntu-latest
       if: ${{ (success() || failure()) && (needs.scan-docker-image.result != 'skipped') &&  github.event.pull_request.merged }} 
       needs: scan-docker-image
-      with:
-        version: v3.14.4
         
       
       
