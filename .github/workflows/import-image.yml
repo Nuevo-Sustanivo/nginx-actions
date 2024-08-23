@@ -106,7 +106,7 @@ jobs:
     release:
       name: Setup Helm and Release
       runs-on: ubuntu-latest
-      if: ${{ (success() || failure()) && (needs.scan-docker-image.result != 'skipped') &&  github.event.pull_request.merged }} 
+      if: ${{ (success() || failure()) && (needs.scan-docker-image.result != 'skipped') }} 
       needs: scan-docker-image
       permissions:
           id-token: write
