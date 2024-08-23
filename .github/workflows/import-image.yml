@@ -104,15 +104,13 @@ jobs:
         
         
     release:
-      name: Check for changed files
-      uses: buffdeveloper/nginx-actions/.github/actions/detect-changes@feat/upgrade
+      name: Setup Helm and Release
+      uses: azure/setup-helm@v4.2.0
       if: ${{ (success() || failure()) && (needs.scan-docker-image.result != 'skipped') &&  github.event.pull_request.merged }} 
       needs: scan-docker-image
       with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        COMMON_PATH: 'common'
-        ENV_PATH: 'env'
-        REPO_PATH: 'nginx-action'
+        version: v3.14.4
+        
       
       
       
