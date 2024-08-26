@@ -63,9 +63,7 @@ jobs:
             else
               echo "No unignored vulnerabilities found"
             fi
-
-            #jq -r '.Results[].Vulnerabilities[] | select(.Severity == "HIGH" or .Severity == "CRITICAL") | "\(.VulnerabilityID) \(.Severity)"' trivy-results.json
-            # jq -r '.runs[].results[] | select(.message.text | contains("Severity: HIGH") or contains("Severity: CRITICAL")) | .message.text' results.sarif
+            
           continue-on-error: true
     
         - name: Import image to Azure Container Registry
@@ -104,3 +102,98 @@ jobs:
           run: |
             echo "Repo: ${{ env.REPO_NAME }}, Image: ${{ env.IMAGE_NAME }}, Tag: ${{ env.TAG }}"
         
+        
+    release:
+      name: Create Release
+      runs-on: ubuntu-latest
+      if: ${{ (success() || failure()) && (needs.scan-docker-image.result != 'skipped') && github.event.pull_request.merged }} 
+      needs: scan-docker-image
+      permissions:
+          id-token: write
+          contents: write
+          actions: read
+          security-events: write
+          pull-requests: write
+          packages: write
+      outputs:
+        version: ${{ steps.gitversion.outputs.majorMinorPatch }}
+        majorVersion: ${{ steps.gitversion.outputs.major }}
+        releaseNotes: ${{ steps.releaseNotes.outputs.releaseNotes }}
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+
+        - name: Set up Helm
+          uses: azure/setup-helm@v4.2.0
+          with:
+            version: v3.14.4
+
+        - name: Install GitVersion
+          uses: gittools/actions/gitversion/setup@v0.10.2
+          with:
+            versionSpec: '5.x'
+
+        - name: Use GitVersion
+          id: gitversion
+          uses: gittools/actions/gitversion/execute@v0.10.2
+
+        - name: What version
+          run: echo ${{ steps.gitversion.outputs.semVer }}
+
+        - name: Get Current Release
+          id: get-release
+          shell: bash
+          run: |
+            echo "current_release=$(gh release view v${{ steps.gitversion.outputs.majorMinorPatch }} --json name --jq '.name')" >> $GITHUB_OUTPUT
+          env:
+            GH_TOKEN: ${{ github.token }}
+
+        - name: Create Release
+          # Use format as workaround for open issue: https://github.com/actions/runner/issues/1173
+          if: steps.get-release.outputs.current_release != format('v{0}', steps.gitversion.outputs.majorMinorPatch)
+          shell: bash
+          run: |
+            gh release create v${{ steps.gitversion.outputs.majorMinorPatch }} --generate-notes
+          env:
+            GH_TOKEN: ${{ github.token }}
+        - name: Get Github Release Notes
+          id: releaseNotes
+          shell: bash
+          run: |
+            releaseNotes="$(gh release view v${{ steps.gitversion.outputs.majorMinorPatch }} --json body --jq .body)"        
+            echo "releaseNotes<<EOF" >> $GITHUB_OUTPUT
+            echo "$releaseNotes" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT        
+          env:
+            GH_TOKEN: ${{ github.token }}
+        
+    tag-major:
+      runs-on: ubuntu-latest
+      needs: 
+        - release
+      permissions:
+          id-token: write
+          contents: write
+          actions: read
+          security-events: write
+          pull-requests: write
+          packages: write
+      
+      name: Update Major Tag
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+          with:
+            fetch-depth: 0
+  
+        - name: Tag new target
+          run: git tag -f v${{ needs.release.outputs.majorVersion }} v${{ needs.release.outputs.version }}
+  
+        - name: Push new tag
+          run: git push origin v${{ needs.release.outputs.majorVersion }} --force
+  
+  
+  
+  

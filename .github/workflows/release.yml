@@ -1,0 +1,94 @@
+on:
+    workflow_call:
+      inputs:
+        gh_runner:
+          description: The label of the gh runner to use for the workflow
+          type: string
+          default: "ubuntu-latest"
+      outputs:
+        version:
+          description: "The major minor patch semantic version"
+          value: ${{ jobs.release.outputs.version }}
+        releaseNotes:
+          description: "Current release notes"
+          value: ${{ jobs.release.outputs.releaseNotes }}
+  
+  jobs:
+    release:
+      runs-on: ${{ inputs.gh_runner }}
+      outputs:
+        version: ${{ steps.gitversion.outputs.majorMinorPatch }}
+        majorVersion: ${{ steps.gitversion.outputs.major }}
+        releaseNotes: ${{ steps.releaseNotes.outputs.releaseNotes }}
+  
+      permissions:
+          id-token: write
+          contents: write
+          actions: read
+          security-events: write
+          pull-requests: write
+          packages: write
+  
+      steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+  
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.10.2
+        with:
+          versionSpec: '5.x'
+  
+      - name: Use GitVersion
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.10.2
+  
+      - name: What version
+        run: echo ${{ steps.gitversion.outputs.semVer }}
+  
+      - name: Get Current Release
+        id: get-release
+        shell: bash
+        run: |
+          echo "current_release=$(gh release view v${{ steps.gitversion.outputs.majorMinorPatch }} --json name --jq '.name')" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ github.token }}
+  
+      - name: Create Release
+        # Use format as workaround for open issue: https://github.com/actions/runner/issues/1173
+        if: steps.get-release.outputs.current_release != format('v{0}', steps.gitversion.outputs.majorMinorPatch)
+        shell: bash
+        run: |
+          gh release create v${{ steps.gitversion.outputs.majorMinorPatch }} --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+  
+      - name: Get Github Release Notes
+        id: releaseNotes
+        shell: bash
+        run: |
+          releaseNotes="$(gh release view v${{ steps.gitversion.outputs.majorMinorPatch }} --json body --jq .body)"        
+          echo "releaseNotes<<EOF" >> $GITHUB_OUTPUT
+          echo "$releaseNotes" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT        
+        env:
+          GH_TOKEN: ${{ github.token }}
+      
+    tag-major:
+      runs-on: ubuntu-latest
+      needs: 
+        - release
+  
+      name: Update Major Tag
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+          with:
+            fetch-depth: 0
+  
+        - name: Tag new target
+          run: git tag -f v${{ needs.release.outputs.majorVersion }} v${{ needs.release.outputs.version }}
+  
+        - name: Push new tag
+          run: git push origin v${{ needs.release.outputs.majorVersion }} --force
