@@ -49,7 +49,7 @@ jobs:
 
       - name: List files with changes
         run: |
-          ls -l nginx-action/files_with_changes
+          ls -lR nginx-action/files_with_changes
         shell: bash
 
       - name: Check for deleted files
