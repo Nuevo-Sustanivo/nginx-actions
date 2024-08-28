@@ -26,10 +26,11 @@ runs:
       echo "Base SHA: ${{ github.event.pull_request.base.sha }}"
       echo "Current SHA: ${{ github.sha }}"
 
-      #git diff --name-status ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep -v '\.github/' > changed_files.txt
+      git diff --name-status ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep -v '\.github/' > changed_files.txt
 
       PR_NUMBER=${{ github.event.pull_request.number }}
-      gh pr diff $PR_NUMBER --name-only > changed_files.txt
+      # gh pr diff $PR_NUMBER --name-only > changed_files.txt
+      # git log --diff-filter=R --name-only -p -- $REPO_PATH >> changed_files.txt
       #git log --diff-filter=D --name-only -p -- $REPO_PATH > deleted_files.txt
     shell: bash
 
