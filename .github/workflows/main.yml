@@ -32,7 +32,7 @@ jobs:
       - name: Check for changed files
         uses: buffdeveloper/nginx-actions/.github/actions/fetch-changed@feat/upgrade
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.READ_ONLY_GH_PAT }}
           COMMON_PATH: 'common'
           ENV_PATH: 'env'
           REPO_PATH: 'nginx-action'
