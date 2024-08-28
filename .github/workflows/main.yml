@@ -35,7 +35,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ENV_PATH: 'env/dev'
           COMMON_PATH: 'common'
-          REPO_PATH: 'nginx-actions'
+          REPO_PATH: 'nginx-action'
         
       
       - name: Check for changed files
