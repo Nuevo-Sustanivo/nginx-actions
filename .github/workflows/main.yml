@@ -10,6 +10,7 @@ on:
 env:
   configuration_item: 'nginx'
 
+
 jobs:
   deploy:
     name: Deploy NGINX Helm Chart
@@ -29,10 +30,13 @@ jobs:
           version: v3.14.4
 
       - name: Fetch Changes
-        run: |
-          git fetch --all
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }} #> nginx-action/files_with_changes
-        shell: bash
+        uses: buffdeveloper/nginx-actions/.github/actions/fetch-changed@feat/upgrade
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ENV_PATH: 'env/dev'
+          COMMON_PATH: 'common'
+          REPO_PATH: 'nginx-actions'
+        
       
       - name: Check for changed files
         uses: buffdeveloper/nginx-actions/.github/actions/detect-changes@feat/upgrade
