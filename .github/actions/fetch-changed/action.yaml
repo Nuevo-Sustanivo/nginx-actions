@@ -21,6 +21,11 @@ runs:
       if [ -n "$REPO_PATH" ]; then
         cd $REPO_PATH
       fi
+
+      # Debugging output
+      echo "Base SHA: ${{ github.event.pull_request.base.sha }}"
+      echo "Current SHA: ${{ github.sha }}"
+
       git diff --name-status ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep -v '\.github/' > changed_files.txt
     shell: bash
 
