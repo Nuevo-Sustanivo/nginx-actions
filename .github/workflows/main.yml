@@ -14,7 +14,7 @@ env:
 jobs:
   detect-changes:
     name: "Detect Changes"
-    uses: ./.github/actions/detect-changes@feat/upgrade
+    uses: buffdeveloper/nginx-actions/.github/actions/detect-changes@feat/upgrade
     with:
       GITHUB_TOKEN: ${{ secrets.READ_ONLY_GH_PAT }}
       COMMON_PATH: 'common'
