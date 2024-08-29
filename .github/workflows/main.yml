@@ -19,10 +19,10 @@ jobs:
     with:
       detect-changes-common: |
         common:
-          - 'nginx-action/common'
+          - 'common'
       detect-changes-dev: |
         dev:
-          - 'nginx-action/env/dev'
+          - 'env/dev'
 
   deploy:
     name: Deploy NGINX Helm Chart
