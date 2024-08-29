@@ -16,10 +16,9 @@ jobs:
     name: "Detect Changes"
     uses: buffdeveloper/nginx-actions/.github/workflows/detect-changes.yml@feat/upgrade
     with:
-      GITHUB_TOKEN: ${{ secrets.READ_ONLY_GH_PAT }}
-      COMMON_PATH: 'common'
-      ENV_PATH: 'env'
-      REPO_PATH: 'nginx-action'
+      detect-changes-dev: |
+        dev:
+          - 'nginx-action/env/dev'
 
   deploy:
     name: Deploy NGINX Helm Chart
