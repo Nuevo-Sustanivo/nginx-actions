@@ -12,6 +12,15 @@ env:
 
 
 jobs:
+  detect-changes:
+    name: "Detect Changes"
+    uses: ./.github/actions/detect-changes@feat/upgrade
+    with:
+      GITHUB_TOKEN: ${{ secrets.READ_ONLY_GH_PAT }}
+      COMMON_PATH: 'common'
+      ENV_PATH: 'env'
+      REPO_PATH: 'nginx-action'
+
   deploy:
     name: Deploy NGINX Helm Chart
     runs-on: ubuntu-latest
