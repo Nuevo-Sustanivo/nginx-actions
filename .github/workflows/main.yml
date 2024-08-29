@@ -13,6 +13,17 @@ env:
 
 
 jobs:
+  detect-changes:
+    name: "Detect Changes"
+    uses: buffdeveloper/nginx-actions/.github/workflows/detect-changes.yml@feat/upgrade
+    with:
+      detect-changes-common: |
+        common:
+          - 'nginx-action/common'
+      detect-changes-dev: |
+        dev:
+          - 'nginx-action/env/dev'
+
   deploy:
     name: Deploy NGINX Helm Chart
     runs-on: ubuntu-latest
@@ -28,21 +39,12 @@ jobs:
       - name: Set up Helm
         uses: azure/setup-helm@v4.2.0
         with:
-          version: v3.14.4
-
-      - name: Fetch Changes
-        uses: buffdeveloper/nginx-actions/.github/actions/fetch-changed@feat/upgrade
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ENV_PATH: 'env/dev'
-          COMMON_PATH: 'common'
-          REPO_PATH: 'nginx-action'
-        
+          version: v3.14.4 
       
       - name: Check for changed files
         uses: buffdeveloper/nginx-actions/.github/actions/detect-changes@feat/upgrade
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.READ_ONLY_GH_PAT }}
           COMMON_PATH: 'common'
           ENV_PATH: 'env'
           REPO_PATH: 'nginx-action'

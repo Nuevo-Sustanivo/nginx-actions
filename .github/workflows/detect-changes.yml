@@ -51,6 +51,9 @@ jobs:
         with:
           filters: |
             ${{ inputs.detect-changes-dev }}
+
       - name: dev folder changes
         if: steps.changes.outputs.changes-dev == 'true'
-        run: echo "Changes to dev folder detected!"
+        run: |
+          echo "Changes to dev folder detected!"
+          echo "Changes to dev:\n ${{ steps.changes.outputs.dev }}" #>> $GITHUB_ENV

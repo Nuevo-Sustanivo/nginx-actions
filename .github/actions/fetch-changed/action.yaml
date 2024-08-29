@@ -21,7 +21,17 @@ runs:
       if [ -n "$REPO_PATH" ]; then
         cd $REPO_PATH
       fi
-      git diff --name-status ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep -v '\.github/' | grep -v '\.md$' > changed_files.txt
+
+      # Debugging output
+      echo "Base SHA: ${{ github.event.pull_request.base.sha }}"
+      echo "Current SHA: ${{ github.sha }}"
+
+      git diff --name-status ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep -v '\.github/' > changed_files.txt
+
+      PR_NUMBER=${{ github.event.pull_request.number }}
+      # gh pr diff $PR_NUMBER --name-only > changed_files.txt
+      # git log --diff-filter=R --name-only -p -- $REPO_PATH >> changed_files.txt
+      #git log --diff-filter=D --name-only -p -- $REPO_PATH > deleted_files.txt
     shell: bash
 
   - name: Separate the files in the PR accordingly to their status (Add, Modify, Delete) and env (common, dev, tst, prd)
