@@ -16,6 +16,9 @@ jobs:
     name: "Detect Changes"
     uses: buffdeveloper/nginx-actions/.github/workflows/detect-changes.yml@feat/upgrade
     with:
+      detect-changes-common: |
+        common:
+          - 'nginx-action/common'
       detect-changes-dev: |
         dev:
           - 'nginx-action/env/dev'
