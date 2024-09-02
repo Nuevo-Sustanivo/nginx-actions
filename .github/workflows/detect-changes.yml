@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' || github.event.pull_request.merged == true
     outputs:
-      changes-common: ${{ steps.changes.outputs.changes-common }}
+      common: ${{ steps.changes.outputs.changes-common }}
     steps:
       - name: Detect Changes for common
         uses: dorny/paths-filter@v2
@@ -56,7 +56,7 @@ jobs:
         #if: steps.changes.outputs.changes-dev == 'true'
         run: |
           echo "Changes to dev:"
-          echo "Modified files: ${{ steps.filter.outputs.dev_modified }}"
-          echo "Added files: ${{ steps.filter.outputs.dev_added }}"
-          echo "Removed files: ${{ steps.filter.outputs.dev_removed }}"
-          echo "Renamed files: ${{ steps.filter.outputs.dev_renamed }}"
+          echo "Modified files: ${{ steps.changes.outputs.dev_modified }}"
+          echo "Added files: ${{ steps.changes.outputs.dev_added }}"
+          echo "Removed files: ${{ steps.changes.outputs.dev_removed }}"
+          echo "Renamed files: ${{ steps.changes.outputs.dev_renamed }}"
