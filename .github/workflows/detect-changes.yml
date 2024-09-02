@@ -53,7 +53,10 @@ jobs:
             ${{ inputs.detect-changes-dev }}
 
       - name: dev folder changes
-        if: steps.changes.outputs.changes-dev == 'true'
+        #if: steps.changes.outputs.changes-dev == 'true'
         run: |
-          echo "Changes to dev folder detected!"
-          echo "Changes to dev:\n ${{ steps.changes.outputs.dev }}" #>> $GITHUB_ENV
+          echo "Changes to dev:"
+          echo "Modified files: ${{ steps.filter.outputs.dev_modified }}"
+          echo "Added files: ${{ steps.filter.outputs.dev_added }}"
+          echo "Removed files: ${{ steps.filter.outputs.dev_removed }}"
+          echo "Renamed files: ${{ steps.filter.outputs.dev_renamed }}"
