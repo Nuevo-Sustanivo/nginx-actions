@@ -51,7 +51,7 @@ jobs:
         with:
           filters: |
             dev:
-              - 'dev/**'
+              - 'env/dev/**'
 
       - name: dev folder changes
         if: steps.changes.outputs.dev == 'true'
