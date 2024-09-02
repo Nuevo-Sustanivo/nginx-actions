@@ -54,7 +54,7 @@ jobs:
               - 'dev/**'
 
       - name: dev folder changes
-        #if: steps.changes.outputs.changes-dev == 'true'
+        if: steps.changes.outputs.dev == 'true'
         run: |
           echo "Changes to dev:"
           echo "Modified files: ${{ steps.changes.outputs.dev_modified }}"
