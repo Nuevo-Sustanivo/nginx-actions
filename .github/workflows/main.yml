@@ -46,7 +46,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.READ_ONLY_GH_PAT }}
           COMMON_PATH: 'common'
-          ENV_PATH: 'env'
+          ENV_PATH: 'env/dev'
           REPO_PATH: 'nginx-action'
 
       - name: List files with changes
