@@ -50,7 +50,8 @@ jobs:
         id: changes
         with:
           filters: |
-            ${{ inputs.detect-changes-dev }}
+            dev:
+              - 'dev/**'
 
       - name: dev folder changes
         #if: steps.changes.outputs.changes-dev == 'true'
