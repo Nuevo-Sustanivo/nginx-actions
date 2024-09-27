@@ -5,6 +5,7 @@ on:
   pull_request:
     branches:
     - main
+    - feat/upgrade
     types: [opened, synchronize, reopened, closed]
 
 env:
@@ -18,10 +19,10 @@ jobs:
     with:
       detect-changes-common: |
         common:
-          - 'nginx-action/common'
+          - 'common'
       detect-changes-dev: |
         dev:
-          - 'nginx-action/env/dev'
+          - 'env/dev'
 
   deploy:
     name: Deploy NGINX Helm Chart
@@ -40,13 +41,13 @@ jobs:
         with:
           version: v3.14.4 
       
-      - name: Check for changed files
-        uses: buffdeveloper/nginx-actions/.github/actions/detect-changes@feat/upgrade
-        with:
-          GITHUB_TOKEN: ${{ secrets.READ_ONLY_GH_PAT }}
-          COMMON_PATH: 'common'
-          ENV_PATH: 'env/dev'
-          REPO_PATH: 'nginx-action'
+      # - name: Check for changed files
+      #   uses: buffdeveloper/nginx-actions/.github/actions/detect-changes@feat/upgrade
+      #   with:
+      #     GITHUB_TOKEN: ${{ secrets.READ_ONLY_GH_PAT }}
+      #     COMMON_PATH: 'common'
+      #     ENV_PATH: 'env/dev'
+      #     REPO_PATH: 'nginx-action'
 
       - name: List files with changes
         run: |
