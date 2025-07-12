@@ -78,7 +78,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
       
     tag-major:
-      runs-on: ubuntu-latest
+      runs-on: blacksmith-4vcpu-ubuntu-2404
       needs: 
         - release
   

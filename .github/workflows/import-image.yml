@@ -17,7 +17,7 @@ on:
 jobs:
     scan-docker-image:
       name: "Scan Docker Image with Trivy"
-      runs-on: ubuntu-latest
+      runs-on: blacksmith-4vcpu-ubuntu-2404
       permissions:
         security-events: write
         contents: read
@@ -86,7 +86,7 @@ jobs:
         
     release:
       name: Create Release
-      runs-on: ubuntu-latest
+      runs-on: blacksmith-4vcpu-ubuntu-2404
       if: ${{ (success() || failure()) && (needs.scan-docker-image.result != 'skipped') && github.event.pull_request.merged }} 
       needs: scan-docker-image
       permissions:
@@ -151,7 +151,7 @@ jobs:
             GH_TOKEN: ${{ github.token }}
         
     tag-major:
-      runs-on: ubuntu-latest
+      runs-on: blacksmith-4vcpu-ubuntu-2404
       needs: 
         - release
       permissions:
