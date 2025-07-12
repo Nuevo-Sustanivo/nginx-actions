@@ -22,7 +22,7 @@ on:
 jobs:
   changes-common:
     name: "Detect changes to common folder"
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     if: github.event_name == 'pull_request' || github.event.pull_request.merged == true
     outputs:
       common: ${{ steps.changes.outputs.changes-common }}
@@ -40,7 +40,7 @@ jobs:
 
   changes-dev:
     name: "Detect changes to dev folder"
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     if: github.event_name == 'pull_request' && github.event.pull_request.merged == false
     outputs:
         dev: ${{ needs.changes-dev.outputs.dev }}
